@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Clientes e Vendas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>Sistema de Controle de Clientes e Vendas</h1>
+
+  <section id="loginSection" class="card">
+    <h2>Login do Estabelecimento</h2>
+    <form id="formLogin">
+      <label for="emailLogin">Email:</label>
+      <input type="email" id="emailLogin" placeholder="Email" required />
+      <label for="senhaLogin">Senha:</label>
+      <input type="password" id="senhaLogin" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+  </section>
+
+  <section id="painelSection" style="display: none;" class="card">
+    <div class="header-painel">
+      <h2>Painel de Controle</h2>
+      <span id="usuarioLogado"></span>
+      <button id="btnLogout" class="btn-secondary">Sair</button>
+    </div>
+
+    <div id="usuariosSection" class="form-section" style="display: none;">
+      <h3>Gerenciar Usuários (Apenas Admin)</h3>
+      <form id="formCadastroUsuario">
+        <label for="nomeUsuario">Nome:</label>
+        <input type="text" id="nomeUsuario" placeholder="Nome do Usuário" required />
+        <label for="emailUsuario">Email:</label>
+        <input type="email" id="emailUsuario" placeholder="Email do Usuário" required />
+        <label for="senhaUsuario">Senha:</label>
+        <input type="password" id="senhaUsuario" placeholder="Senha" required />
+        <label for="roleUsuario">Perfil:</label>
+        <select id="roleUsuario" required>
+          <option value="vendedor">Vendedor</option>
+          <option value="gerente">Gerente</option>
+          <option value="admin">Administrador</option>
+        </select>
+        <button type="submit">Cadastrar Novo Usuário</button>
+      </form>
+    </div>
+
+    <div class="form-section">
+      <h3>Gerenciar Clientes</h3>
+
+      <div class="search-filters">
+        <input type="text" id="filtroNomeCliente" placeholder="Pesquisar por nome" />
+        <input type="text" id="filtroCpfCnpjCliente" placeholder="Pesquisar por CPF/CNPJ" />
+        <input type="text" id="filtroEmailCliente" placeholder="Pesquisar por Email" />
+        <input type="text" id="filtroTelefoneCliente" placeholder="Pesquisar por Telefone" />
+        <button id="btnLimparFiltros" class="btn-secondary">Limpar Filtros</button>
+      </div>
+
+      <ul id="listaClientes"></ul>
+
+      <button id="btnMostrarCadastroCliente" class="btn-primary">Cadastrar Novo Cliente</button>
+
+      <div id="cadastroClienteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <span class="close-button" onclick="fecharModalCadastroCliente()">&times;</span>
+          <h3 id="tituloFormCliente">Cadastrar Novo Cliente</h3>
+          <form id="formCadastroCliente">
+            <input type="hidden" id="clienteIdEdit" />
+            <label for="nome_cliente">Nome do Cliente:</label>
+            <input type="text" id="nome_cliente" placeholder="Nome Completo / Razão Social" required />
+            <label for="cpf_cnpj">CPF/CNPJ:</label>
+            <input type="text" id="cpf_cnpj" placeholder="CPF ou CNPJ (apenas números)" />
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" placeholder="Telefone (com DDD)" />
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Email do cliente" />
+            <label for="endereco">Endereço:</label>
+            <textarea id="endereco" placeholder="Endereço Completo"></textarea>
+            <button type="submit" id="btnSalvarCliente">Cadastrar Cliente</button>
+            <button type="button" class="btn-secondary" onclick="fecharModalCadastroCliente()">Cancelar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Gerenciar Vendas</h3>
+      <div class="search-filters">
+        <input type="text" id="filtroTermoVenda" placeholder="Pesquisar venda (nome cliente)" />
+        <select id="filtroStatusVenda">
+          <option value="">Todos os Status</option>
+          <option value="Aberta">Aberta</option>
+          <option value="Paga">Paga</option>
+          <option value="Parcialmente Paga">Parcialmente Paga</option>
+          <option value="Vencida">Vencida</option>
+        </select>
+        <input type="date" id="filtroDataInicioVenda" placeholder="Data Início" />
+        <input type="date" id="filtroDataFimVenda" placeholder="Data Fim" />
+        <button id="btnLimparFiltrosVenda" class="btn-secondary">Limpar Filtros Vendas</button>
+      </div>
+
+      <ul id="listaVendasGlobal"></ul>
+      <button id="btnMostrarCadastroVenda" class="btn-primary">Registrar Nova Venda</button>
+
+      <div id="cadastroVendaModal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <span class="close-button" onclick="fecharModalCadastroVenda()">&times;</span>
+          <h3 id="tituloFormVenda">Registrar Nova Venda</h3>
+          <form id="formCadastroVenda">
+            <input type="hidden" id="vendaIdEdit" />
+            <label for="vendaClienteId">Cliente:</label>
+            <select id="vendaClienteId" required></select> <label for="valor_total_venda">Valor Total:</label>
+            <input type="number" id="valor_total_venda" step="0.01" min="0" required />
+
+            <label for="valor_pago_venda">Valor Pago Inicial (pode ser 0):</label>
+            <input type="number" id="valor_pago_venda" step="0.01" min="0" value="0" />
+
+            <label for="data_vencimento_venda">Data de Vencimento (se a prazo):</label>
+            <input type="date" id="data_vencimento_venda" />
+
+            <label for="forma_pagamento_venda">Forma de Pagamento:</label>
+            <select id="forma_pagamento_venda" required>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Pix">Pix</option>
+              <option value="Boleto">Boleto</option>
+              <option value="Crediário">Crediário</option>
+            </select>
+
+            <label for="observacoes_venda">Observações da Venda:</label>
+            <textarea id="observacoes_venda"></textarea>
+
+            <button type="submit" id="btnSalvarVenda">Registrar Venda</button>
+            <button type="button" class="btn-secondary" onclick="fecharModalCadastroVenda()">Cancelar</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="pagamentoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <span class="close-button" onclick="fecharModalPagamento()">&times;</span>
+          <h3>Registrar Pagamento para Venda #<span id="pagamentoVendaId"></span></h3>
+          <p>Valor Total da Venda: R$ <span id="pagamentoVendaTotal"></span></p>
+          <p>Valor Já Pago: R$ <span id="pagamentoVendaPago"></span></p>
+          <p>Valor Em Aberto: R$ <span id="pagamentoVendaDevido"></span></p>
+          <form id="formPagamento">
+            <input type="hidden" id="pagamentoVendaHiddenId" />
+            <label for="valorPagamento">Valor do Pagamento:</label>
+            <input type="number" id="valorPagamento" step="0.01" min="0.01" required />
+            <label for="formaPagamentoPagamento">Forma de Pagamento:</label>
+            <select id="formaPagamentoPagamento" required>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Pix">Pix</option>
+              <option value="Boleto">Boleto</option>
+            </select>
+            <label for="observacoesPagamento">Observações (opcional):</label>
+            <textarea id="observacoesPagamento"></textarea>
+            <button type="submit">Registrar Pagamento</button>
+            <button type="button" class="btn-secondary" onclick="fecharModalPagamento()">Cancelar</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="vendasClienteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <span class="close-button" onclick="fecharModalVendasCliente()">&times;</span>
+          <h3>Vendas do Cliente: <span id="vendasClienteNome"></span></h3>
+          <ul id="listaVendasCliente"></ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
