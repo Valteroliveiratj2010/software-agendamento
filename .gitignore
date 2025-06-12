@@ -1,13 +1,4 @@
-# Ignora a pasta de módulos do Node.js
 node_modules/
-
-# Ignora arquivos de ambiente local
 .env
-
-# Ignora logs de execução (se houver)
-*.log
-
-# Outros arquivos/pastas comuns a serem ignorados
-# build/
-# dist/
-# .vscode/
+backend/node_modules/
+frontend/node_modules/
