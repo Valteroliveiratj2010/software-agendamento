@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "you",
   "version": "1.0.0",
   "description": "",
@@ -20,3 +21,17 @@
   },
   "devDependencies": {}
 }
+=======
+  "dependencies": {
+<<<<<<< HEAD
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+=======
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2"
+>>>>>>> b0401d4 (primeiro commit do projeto agendamento-de-clientes)
+  }
+}
+>>>>>>> 5297db9323a32ebebd5df2f4096bbad58a2db2f8
